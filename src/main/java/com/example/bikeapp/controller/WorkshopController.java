@@ -6,10 +6,7 @@ import com.example.bikeapp.entities.Bike;
 import com.example.bikeapp.entities.BikePart;
 import com.example.bikeapp.repo.BikeRepo;
 import com.example.bikeapp.service.WorkshopService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,11 +30,16 @@ public class WorkshopController {
         return workshopService.getUnusedParts();
     }
 
-    public Bike getBikeById(Long id) {
-        return null;
+    @PostMapping("/addBike")
+    public void addBike(@RequestBody Bike bike) {
+        workshopService.addBike(bike);
     }
 
-    public Bike addBike(Bike bike) {
+    @DeleteMapping("/deleteBike/{id}")
+    public void deleteBike(@PathVariable Long id) {
+        workshopService.deleteBike(id);
+    }
+    public Bike getBikeById(Long id) {
         return null;
     }
 
@@ -45,8 +47,6 @@ public class WorkshopController {
         return null;
     }
 
-    public void deleteBike(Long id) {
-    }
 
 }
 

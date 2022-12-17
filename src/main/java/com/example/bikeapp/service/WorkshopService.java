@@ -24,6 +24,7 @@ public class WorkshopService {
     public List<BikesDTO> getAllBikes(Long userId) {
 
         return bikeRepo.findByUserId(userId).stream().map(bike -> BikesDTO.builder()
+                .id(bike.getId())
                 .brand(bike.getBrand())
                 .model(bike.getModel())
                 .year(bike.getYear())
@@ -37,5 +38,13 @@ public class WorkshopService {
 
     public List<BikePart> getUnusedParts() {
         return bikePartRepo.getBikePartsByBikeId(-1L).stream().toList();
+    }
+
+    public void addBike(Bike bike) {
+        bikeRepo.save(bike);
+    }
+
+    public void deleteBike(Long id) {
+        bikeRepo.deleteById(id);
     }
 }

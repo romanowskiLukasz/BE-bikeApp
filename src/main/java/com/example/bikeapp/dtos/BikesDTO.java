@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class BikesDTO {
 
+    private Long id;
     private String brand;
     private String model;
     private String year;
