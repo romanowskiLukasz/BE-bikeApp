@@ -1,5 +1,7 @@
 package com.example.bikeapp.service;
 
+import com.example.bikeapp.dtos.AddBikePartDTO;
+import com.example.bikeapp.dtos.BikeNameDTO;
 import com.example.bikeapp.dtos.BikePartDTO;
 import com.example.bikeapp.dtos.BikesDTO;
 import com.example.bikeapp.entities.Bike;
@@ -8,6 +10,9 @@ import com.example.bikeapp.repo.BikePartRepo;
 import com.example.bikeapp.repo.BikeRepo;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,5 +51,33 @@ public class WorkshopService {
 
     public void deleteBike(Long id) {
         bikeRepo.deleteById(id);
+    }
+
+    public void addBikePart(AddBikePartDTO addBikePartDTO) {
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        BikePart bikePart = BikePart.builder()
+                .category(addBikePartDTO.getCategory())
+                .distance(0)
+                .date(simpleDateFormat.format(date))
+                .purchaseDate(simpleDateFormat.format(date))
+                .bikeType(addBikePartDTO.getBikeType())
+                .model(addBikePartDTO.getModel())
+                .bikeId(-1L) // -1L means that the part is not used
+                .build();
+        bikePartRepo.save(bikePart);
+    }
+
+
+    public void deletePart(Long id) {
+        bikePartRepo.deleteById(id);
+    }
+
+    public void updateBikePart(Long partId, Long bikeId,String category) {
+        BikePart oldBikePart = bikePartRepo.findByBikeIdAndCategory(bikeId,category);
+        bikePartRepo.deleteById(oldBikePart.getId());
+        BikePart newBikePart = bikePartRepo.findById(partId).get();
+        newBikePart.setBikeId(bikeId);
+        bikePartRepo.save(newBikePart);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.bikeapp.controller;
 
+import com.example.bikeapp.dtos.AddBikePartDTO;
+import com.example.bikeapp.dtos.BikeNameDTO;
 import com.example.bikeapp.dtos.BikePartDTO;
 import com.example.bikeapp.dtos.BikesDTO;
 import com.example.bikeapp.entities.Bike;
@@ -38,6 +40,21 @@ public class WorkshopController {
     @DeleteMapping("/deleteBike/{id}")
     public void deleteBike(@PathVariable Long id) {
         workshopService.deleteBike(id);
+    }
+
+    @DeleteMapping("/deletePart/{id}")
+    public void deletePart(@PathVariable Long id) {
+        workshopService.deletePart(id);
+    }
+
+    @PostMapping("/addPart")
+    public void addBike(@RequestBody AddBikePartDTO addBikePartDTO) {
+        workshopService.addBikePart(addBikePartDTO);
+    }
+
+    @PutMapping("/updateBikePart/{partId}/{bikeId}/{partCategory}")
+    public void updateBikePart(@PathVariable Long partId, @PathVariable Long bikeId, @PathVariable String partCategory) {
+        workshopService.updateBikePart(partId, bikeId, partCategory);
     }
     public Bike getBikeById(Long id) {
         return null;

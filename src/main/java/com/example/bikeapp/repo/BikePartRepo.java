@@ -11,6 +11,7 @@ import java.util.List;
 public interface BikePartRepo extends JpaRepository<BikePart, Long> {
 
     List<BikePart> getBikePartsByBikeId(Long id);
+    BikePart findByBikeIdAndCategory(Long id,String category);
     List<BikePartDTO> getBikePartsDTOByBikeId(Long id);
 }
 
