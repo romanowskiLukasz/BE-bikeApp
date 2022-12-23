@@ -21,7 +21,7 @@ public class BikePart {
     private String category;
 
     @Column(name = "distance")
-    private int distance;
+    private Integer distance;
 
     //when was added to the bike
     @Column(name = "date")

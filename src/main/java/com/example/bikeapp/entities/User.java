@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "bikePart")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,6 +28,9 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "refreshToken")
+    private String refreshToken;
 
 
 }

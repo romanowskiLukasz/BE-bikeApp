@@ -17,9 +17,11 @@ INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_t
 INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('tires',700,'2018-01-01','Shimano XT',3,   '2022-11-01','Road');
 INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('cassette',230,'2018-01-01','Shimano XT',3,'2022-11-01','Road');
 
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',230,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',230,'2018-01-01','Sram Eagle XXX',-1,'2022-10-01','Road');
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',230,'2018-01-01','Shimano XTR',-1,'2022-12-11','MTB');
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('brakePads',500,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('tires',700,'2018-01-01','Shimano XT',-1,   '2022-11-01','Road');
-INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('cassette',230,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',0,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',0,'2018-01-01','Sram Eagle XXX',-1,'2022-10-01','Road');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('chain',0,'2018-01-01','Shimano XTR',-1,'2022-12-11','MTB');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('brakePads',0,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('tires',0,'2018-01-01','Shimano XT',-1,   '2022-11-01','Road');
+INSERT into bike_part (category,distance,date,model,bike_id,purchase_date,bike_type) values ('cassette',0,'2018-01-01','Shimano XT',-1,'2022-11-01','Road');
+
+INSERT into users (refresh_token,email,name,password,profile_img) values ('4cf4fba02f788bd8729bedff461a4fab2b6af451','lukas.r200@gmail.com','Lukasz Romanowski','$2a$10$d0azZD.xEcl.h9TYCVWs.unvTEB4LFqtfkQ3Jgi.XsTs1VbyL3jya','https://dgalywyr863hv.cloudfront.net/pictures/athletes/14592553/9923464/2/large.jpg');
