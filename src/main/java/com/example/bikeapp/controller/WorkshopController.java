@@ -4,10 +4,7 @@ import com.example.bikeapp.dtos.*;
 import com.example.bikeapp.entities.Bike;
 import com.example.bikeapp.entities.BikePart;
 import com.example.bikeapp.entities.User;
-import com.example.bikeapp.repo.BikeRepo;
 import com.example.bikeapp.service.WorkshopService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,8 +51,13 @@ public class WorkshopController {
 
     @PutMapping("/updateBikePart/{partId}/{bikeId}/{partCategory}")
     public void updateBikePart(@PathVariable Long partId, @PathVariable Long bikeId, @PathVariable String partCategory) {
-        workshopService.updateBikePart(partId, bikeId, partCategory);
+        workshopService.changeBikePartBike(partId, bikeId, partCategory);
     }
+
+    @PutMapping("/updateBike")
+        public void updateBike(@RequestBody UpdateBikeDTO updateBikeDTO) {
+            workshopService.updateBike(updateBikeDTO);
+        }
 
     @PostMapping("/user/login")
     public User loginUser(@RequestBody LoginDTO loginModel) {
@@ -65,6 +67,16 @@ public class WorkshopController {
     @PostMapping("/user/register")
     public void registerUser(@RequestBody RegisterDTO registerDTO) {
          workshopService.registerUser(registerDTO);
+    }
+
+    @PostMapping("/updatePartsDistance")
+    public void updatePartsDistance(@RequestBody GetActivityListDTO postActivitiesValues) {
+        workshopService.updatePartsDistance(postActivitiesValues);
+    }
+
+    @PostMapping("/updateBikePartDistance/{partId}/{distance}")
+    public void updateBikePartDistance( @PathVariable Long partId, @PathVariable Integer distance) {
+        workshopService.updateBikePartDistance(distance,partId);
     }
 
     public Bike getBikeById(Long id) {

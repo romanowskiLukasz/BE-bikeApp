@@ -1,12 +1,10 @@
 package com.example.bikeapp.service;
 
-import com.example.bikeapp.dtos.AddBikePartDTO;
-import com.example.bikeapp.dtos.BikesDTO;
-import com.example.bikeapp.dtos.LoginDTO;
-import com.example.bikeapp.dtos.RegisterDTO;
+import com.example.bikeapp.dtos.*;
 import com.example.bikeapp.entities.Bike;
 import com.example.bikeapp.entities.BikePart;
 import com.example.bikeapp.entities.User;
+import com.example.bikeapp.repo.ActivityRepo;
 import com.example.bikeapp.repo.BikePartRepo;
 import com.example.bikeapp.repo.BikeRepo;
 import com.example.bikeapp.repo.UserRepo;
@@ -29,11 +27,13 @@ public class WorkshopService {
     private final BikePartRepo bikePartRepo;
     private final BikeRepo bikeRepo;
     private final UserRepo userRepo;
+    private final ActivityRepo activityRepo;
 
-    public WorkshopService(BikePartRepo bikePartRepo, BikeRepo bikeRepo,UserRepo userRepo) {
+    public WorkshopService(BikePartRepo bikePartRepo, BikeRepo bikeRepo,UserRepo userRepo,ActivityRepo activityRepo) {
         this.bikePartRepo = bikePartRepo;
         this.bikeRepo = bikeRepo;
         this.userRepo=userRepo;
+        this.activityRepo=activityRepo;
     }
 
     public List<BikesDTO> getAllBikes(Long userId) {
@@ -74,6 +74,7 @@ public class WorkshopService {
                 .bikeType(addBikePartDTO.getBikeType())
                 .model(addBikePartDTO.getModel())
                 .bikeId(-1L) // -1L means that the part is not used
+                .lastDistanceUpdated(date)
                 .build();
         bikePartRepo.save(bikePart);
     }
@@ -83,7 +84,7 @@ public class WorkshopService {
         bikePartRepo.deleteById(id);
     }
 
-    public void updateBikePart(Long partId, Long bikeId,String category) {
+    public void changeBikePartBike(Long partId, Long bikeId, String category) {
         BikePart oldBikePart = bikePartRepo.findByBikeIdAndCategory(bikeId,category);
         bikePartRepo.deleteById(oldBikePart.getId());
         BikePart newBikePart = bikePartRepo.findById(partId).get();
@@ -112,5 +113,42 @@ public class WorkshopService {
                 .refreshToken(registerDTO.getRefreshToken())
                 .build();
         userRepo.save(user);
+    }
+
+    public void updatePartsDistance(GetActivityListDTO getActivityDTO) {
+        var list=getActivityDTO.getPostActivitiesValues();
+        list.stream().forEach(activity ->{
+            var arr=activity.getBikeName().split(" ");
+            var brand=arr[0];
+            var model=arr[1] + " " + arr[2];
+            var bike=bikeRepo.findByBrandAndModel(brand,model);
+            var bikeParts=bikePartRepo.getBikePartsByBikeId(bike.getId());
+            bikeParts.stream().forEach(bikePart -> {
+                if(bikePart.getLastDistanceUpdated().before(activity.getDate())){
+                    bikePart.setDistance(bikePart.getDistance()+activity.getDistance());
+                    bikePart.setLastDistanceUpdated(activity.getDate());
+                    bikePartRepo.save(bikePart);
+                }
+            });
+        });
+    }
+
+    public void updateBikePartDistance(Integer distance, Long partId) {
+        BikePart bikePart = bikePartRepo.findById(partId).get();
+        bikePart.setDistance(distance);
+        bikePart.setDate(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+                bikePartRepo.save(bikePart);
+    }
+
+    public void updateBike(UpdateBikeDTO updateBikeDTO) {
+        Bike bike = bikeRepo.findById(updateBikeDTO.getId()).get();
+        bike.setBrand(updateBikeDTO.getBrand());
+        bike.setModel(updateBikeDTO.getModel());
+        bike.setYear(updateBikeDTO.getYear());
+        bike.setWeight(updateBikeDTO.getWeight());
+        bike.setSize(updateBikeDTO.getSize());
+        bike.setImg(updateBikeDTO.getImg());
+        bike.setDateOfPurchase(updateBikeDTO.getDateOfPurchase());
+        bikeRepo.save(bike);
     }
 }

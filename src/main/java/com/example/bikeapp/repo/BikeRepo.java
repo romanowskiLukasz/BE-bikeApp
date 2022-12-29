@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface BikeRepo extends JpaRepository<Bike, Long> {
     List<Bike> findByUserId(Long id);
+    Bike findByBrandAndModel(String brand,String model);
 
 }
 

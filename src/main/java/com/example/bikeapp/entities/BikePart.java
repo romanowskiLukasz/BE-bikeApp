@@ -3,6 +3,8 @@ package com.example.bikeapp.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "bikePart")
 @Getter
@@ -38,5 +40,8 @@ public class BikePart {
 
     @Column(name = "bikeId")
     private Long bikeId;
+
+    @Column(name = "lastDistanceUpdated")
+    private Date lastDistanceUpdated;
 
 }
