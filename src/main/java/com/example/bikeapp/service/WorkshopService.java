@@ -151,4 +151,26 @@ public class WorkshopService {
         bike.setDateOfPurchase(updateBikeDTO.getDateOfPurchase());
         bikeRepo.save(bike);
     }
+
+    public void changeUserEmail(UpdateUserEmailDTO updateUserEmailDTO) {
+        User user = userRepo.findById(updateUserEmailDTO.getId()).get();
+        if (PASSWORD_ENCODER.matches(updateUserEmailDTO.getPassword(), user.getPassword())) {
+            user.setEmail(updateUserEmailDTO.getEmail());
+            userRepo.save(user);
+        } else {
+            throw new RuntimeException("Wrong password");
+        }
+
+    }
+
+    public void changeUserPassword(UpdateUserPasswordDTO updateUserPasswordDTO) {
+        User user = userRepo.findById(updateUserPasswordDTO.getId()).get();
+        if (PASSWORD_ENCODER.matches(updateUserPasswordDTO.getOldPassword(), user.getPassword())) {
+            user.setPassword(updateUserPasswordDTO.getNewPassword());
+            userRepo.save(user);
+        } else {
+            throw new RuntimeException("Wrong password");
+        }
+
+    }
 }

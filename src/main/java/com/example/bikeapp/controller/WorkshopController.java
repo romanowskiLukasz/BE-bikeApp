@@ -55,9 +55,19 @@ public class WorkshopController {
     }
 
     @PutMapping("/updateBike")
-        public void updateBike(@RequestBody UpdateBikeDTO updateBikeDTO) {
-            workshopService.updateBike(updateBikeDTO);
-        }
+    public void updateBike(@RequestBody UpdateBikeDTO updateBikeDTO) {
+        workshopService.updateBike(updateBikeDTO);
+    }
+
+    @PutMapping("/changeUserEmail")
+    public void changeUserEmail(@RequestBody UpdateUserEmailDTO updateUserEmailDTO) {
+        workshopService.changeUserEmail(updateUserEmailDTO);
+    }
+
+    @PutMapping("/changeUserPassword")
+    public void changeUserEmail(@RequestBody UpdateUserPasswordDTO updateUserPasswordDTO) {
+        workshopService.changeUserPassword(updateUserPasswordDTO);
+    }
 
     @PostMapping("/user/login")
     public User loginUser(@RequestBody LoginDTO loginModel) {
