@@ -29,8 +29,13 @@ public class WorkshopController {
         return workshopService.getUnusedParts();
     }
 
+    @GetMapping("/getUserAchievements/{userId}")
+    public List<UserAchievementsDTO> getUserAchievements(@PathVariable Long userId) {
+        return workshopService.getUserAchievements(userId);
+    }
+
     @PostMapping("/addBike")
-    public void addBike(@RequestBody Bike bike) {
+    public void addBike(@RequestBody AddBikeDTO bike) {
         workshopService.addBike(bike);
     }
 

@@ -1,13 +1,8 @@
 package com.example.bikeapp.service;
 
 import com.example.bikeapp.dtos.*;
-import com.example.bikeapp.entities.Bike;
-import com.example.bikeapp.entities.BikePart;
-import com.example.bikeapp.entities.User;
-import com.example.bikeapp.repo.ActivityRepo;
-import com.example.bikeapp.repo.BikePartRepo;
-import com.example.bikeapp.repo.BikeRepo;
-import com.example.bikeapp.repo.UserRepo;
+import com.example.bikeapp.entities.*;
+import com.example.bikeapp.repo.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,12 +24,16 @@ public class WorkshopService {
     private final BikeRepo bikeRepo;
     private final UserRepo userRepo;
     private final ActivityRepo activityRepo;
+    private final AchievementsUsersRepo achievementsUsersRepo;
+    private final AchievementRepo achievementRepo;
 
-    public WorkshopService(BikePartRepo bikePartRepo, BikeRepo bikeRepo,UserRepo userRepo,ActivityRepo activityRepo) {
+    public WorkshopService(BikePartRepo bikePartRepo, BikeRepo bikeRepo,UserRepo userRepo,ActivityRepo activityRepo,AchievementsUsersRepo achievementsUsersRepo,AchievementRepo achievementRepo) {
         this.bikePartRepo = bikePartRepo;
         this.bikeRepo = bikeRepo;
         this.userRepo=userRepo;
         this.activityRepo=activityRepo;
+        this.achievementsUsersRepo=achievementsUsersRepo;
+        this.achievementRepo=achievementRepo;
     }
 
     public List<BikesDTO> getAllBikes(Long userId) {
@@ -55,8 +55,18 @@ public class WorkshopService {
         return bikePartRepo.getBikePartsByBikeId(-1L).stream().toList();
     }
 
-    public void addBike(Bike bike) {
-        bikeRepo.save(bike);
+    public void addBike(AddBikeDTO bike) {
+        Bike newBike = Bike.builder()
+                .userId(bike.getUserId())
+                .brand(bike.getBrand())
+                .model(bike.getModel())
+                .year(bike.getYear())
+                .weight(bike.getWeight())
+                .size(bike.getSize())
+                .img(bike.getImg())
+                .dateOfPurchase(bike.getDateOfPurchase())
+                .build();
+        bikeRepo.save(newBike);
     }
 
     public void deleteBike(Long id) {
@@ -89,6 +99,7 @@ public class WorkshopService {
         bikePartRepo.deleteById(oldBikePart.getId());
         BikePart newBikePart = bikePartRepo.findById(partId).get();
         newBikePart.setBikeId(bikeId);
+        newBikePart.setDate(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         bikePartRepo.save(newBikePart);
     }
 
@@ -171,6 +182,25 @@ public class WorkshopService {
         } else {
             throw new RuntimeException("Wrong password");
         }
+
+    }
+
+    public List<UserAchievementsDTO> getUserAchievements(Long userId) {
+        List<UserAchievementsDTO> userAchievementsDTOS = new ArrayList<>();
+        List<Achievement> achievements = achievementRepo.findAll();
+        List<AchievementsUsers> achievementsUsers = achievementsUsersRepo.findAllByUserId(userId);
+        achievements.stream().forEach(achievement -> {
+            Boolean isComplete = achievementsUsers.stream().filter(achievementsUser -> achievementsUser.getAchievementId().equals(achievement.getId())).findFirst().isPresent();
+            UserAchievementsDTO userAchievementsDTO = UserAchievementsDTO.builder()
+                    .name(achievement.getName())
+                    .category(achievement.getCategory())
+                    .img(achievement.getImg())
+                    .isCompleted(isComplete)
+                    .build();
+            userAchievementsDTOS.add(userAchievementsDTO);
+        });
+
+        return userAchievementsDTOS;
 
     }
 }
